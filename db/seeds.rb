@@ -5,3 +5,14 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+puts "seeding scores"
+
+(1..10).each do
+  Score.create(
+    player:Faker::Name.first_name,
+    score:rand(1000)
+  )
+end
+
+puts 'done'

@@ -68,6 +68,9 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    annotate (3.2.0)
+      activerecord (>= 3.2, < 8.0)
+      rake (>= 10.4, < 14.0)
     bindex (0.8.1)
     builder (3.2.4)
     capybara (3.36.0)
@@ -87,6 +90,8 @@ GEM
       reline (>= 0.2.7)
     digest (3.1.0)
     erubi (1.10.0)
+    faker (2.19.0)
+      i18n (>= 1.6, < 2)
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.10.0)
@@ -207,8 +212,10 @@ PLATFORMS
   arm64-darwin-21
 
 DEPENDENCIES
+  annotate
   capybara
   debug
+  faker
   jbuilder
   jsbundling-rails
   pg (~> 1.1)
