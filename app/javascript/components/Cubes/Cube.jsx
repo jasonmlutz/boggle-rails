@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Cube = ({letter, row, col}) => {
+const Cube = ({letter, row, col, index}) => {
   function handleClick() {
-    console.log(row, col, letter)
+    console.log(row, col, letter, index)
   }
   return (
     <li 
