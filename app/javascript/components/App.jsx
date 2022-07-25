@@ -2,7 +2,6 @@ import React from 'react'
 import {useRoutes} from 'react-router-dom'
 
 import Landing from './Landing'
-import NewGame from './Games/NewGame'
 import LoadGame from './Games/LoadGame'
 
 
@@ -15,7 +14,6 @@ const App = () => {
     {
       path: 'game/',
       children: [
-        { path: '', element: <NewGame />},  
         { path: ':game_id/', element: <LoadGame />}
       ]
     },
