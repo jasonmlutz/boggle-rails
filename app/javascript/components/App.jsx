@@ -2,22 +2,13 @@ import React from 'react'
 import {useRoutes} from 'react-router-dom'
 
 import Landing from './Landing'
-import LoadGame from './Games/LoadGame'
-
-
-import ScoresContainer from './Scores/ScoresContainer'
+import { ScoresList } from '../features/scores/ScoresList'
 
 
 const App = () => {
   const routes = useRoutes([
     {path: '/', element: <Landing />},
-    {
-      path: 'game/',
-      children: [
-        { path: ':game_id/', element: <LoadGame />}
-      ]
-    },
-    {path: 'scores/', element: <ScoresContainer />},
+    {path: 'scores/', element: <ScoresList />},
   ])
   return <div className="container mx-auto">{routes}</div>
 }
