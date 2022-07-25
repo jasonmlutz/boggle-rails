@@ -21,7 +21,9 @@ const BoardDisplay = ({cubes}) => {
     return parseCubes(cubes).map((letter, i) => {
       row++;
       if (row === 4) row = 0, col++;
-      return <Cube letter = {letter} row = {row} col = {col} index = {i}/>
+      return <li key={i}>
+        <Cube letter = {letter} row = {row} col = {col} index = {i}/>
+      </li>
     })
   }
 
