@@ -8,6 +8,8 @@
 
 puts "seeding scores"
 
+Score.destroy_all
+
 (1..10).each do
   Score.create(
     player:Faker::Name.first_name,

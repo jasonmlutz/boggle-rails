@@ -23,7 +23,7 @@ const scoresSlice = createSlice({
       .addCase(fetchScores.fulfilled, (state, action) => {
         state.status = "succeeded";
         // Add any fetched scores to the array
-        state.scores = state.scores.concat(action.payload);
+        state.scores = action.payload;
       })
       .addCase(fetchScores.rejected, (state, action) => {
         state.status = "failed";
