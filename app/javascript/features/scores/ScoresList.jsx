@@ -1,13 +1,25 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, {useEffect} from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import { selectAllScores, fetchScores } from "../scores/scoresSlice";
 
 export const ScoresList = () => {
-  const scores = useSelector((state) => state.scores);
+  const dispatch = useDispatch();
+  const scores = useSelector(selectAllScores);
+
+  const scoreStatus = useSelector(state => state.scores.status)
+
+  useEffect(() => {
+    if (scoreStatus === 'idle') {
+      dispatch(fetchScores())
+    }
+  }, [scoreStatus, dispatch])
 
   const renderedScores = scores.map((score) => (
     <tr key={score.id}>
       <td>{score.score}</td>
       <td>{score.player}</td>
+      <td>{score.created_at || 'no time data'}</td>
     </tr>
   ));
 
@@ -19,6 +31,7 @@ export const ScoresList = () => {
           <tr>
             <th>Score</th>
             <th>Player</th>
+            <th>Time</th>
           </tr>
         </thead>
         <tbody>{renderedScores}</tbody>
