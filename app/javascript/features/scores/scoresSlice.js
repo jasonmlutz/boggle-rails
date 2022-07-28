@@ -1,10 +1,17 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 
-const initialState = {
-  scores: [],
+const scoresAdaptor = createEntityAdapter({
+  sortComparer: (a, b) => b.score - a.score, // largest scores first
+});
+
+const initialState = scoresAdaptor.getInitialState({
   status: "idle",
   error: null,
-};
+});
 
 export const fetchScores = createAsyncThunk("scores/fetchScores", async () => {
   const response = await fetch("/api/scores");
@@ -16,14 +23,14 @@ const scoresSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder
+    builder 
       .addCase(fetchScores.pending, (state, action) => {
         state.status = "loading";
       })
       .addCase(fetchScores.fulfilled, (state, action) => {
         state.status = "succeeded";
         // Add any fetched scores to the array
-        state.scores = action.payload;
+        scoresAdaptor.upsertMany(state, action.payload)
       })
       .addCase(fetchScores.rejected, (state, action) => {
         state.status = "failed";
@@ -32,9 +39,7 @@ const scoresSlice = createSlice({
   },
 });
 
-export default scoresSlice.reducer
+export default scoresSlice.reducer;
 
-export const selectAllScores = (state) => state.scores.scores;
-
-export const selectScoreById = (state, scoreId) =>
-  state.scores.find((score) => score.id === scoreId);
+export const { selectAll: selectAllScores, selectById: selectScoreById } =
+  scoresAdaptor.getSelectors((state) => state.scores);

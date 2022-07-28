@@ -8,20 +8,29 @@ class Api::GamesController < ApplicationController
     if @game
       render json: @game
     else
-      render json: {error: 'record(s) not found'}
+      render json: { error: 'record(s) not found' }
     end
   end
 
   # POST  /api/games/new(.:format)
   def create
-    @game = Game.create()
-
-    render json: @game
+    @game = Game.new(game_params)
+    if @game.save
+      render json: @game
+    else
+      render json: { error: 'object(s) not created' }
+    end
   end
 
   # GET  /api/games
   def index
     @games = Game.all
     render json: @games
+  end
+
+  private
+
+  def game_params
+    params.permit(:cubes)
   end
 end

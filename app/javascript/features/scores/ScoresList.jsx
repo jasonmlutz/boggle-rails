@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { selectAllScores, fetchScores } from "../scores/scoresSlice";
 
@@ -20,6 +21,7 @@ export const ScoresList = () => {
       <td>{score.score}</td>
       <td>{score.player}</td>
       <td>{score.created_at || 'no time data'}</td>
+      <td><Link to={`/scores/${score.id}`}>details</Link></td>
     </tr>
   ));
 
