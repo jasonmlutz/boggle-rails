@@ -19,4 +19,9 @@ class Api::GamesController < ApplicationController
     render json: @game
   end
 
+  # GET  /api/games
+  def index
+    @games = Game.all
+    render json: @games
+  end
 end
