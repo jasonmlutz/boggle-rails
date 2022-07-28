@@ -1,5 +1,5 @@
 class Game < ApplicationRecord
-  # before_validation :generate_cubes, on: :create
+  before_validation :generate_cubes, on: :create
 
   private
     def generate_cubes

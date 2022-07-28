@@ -1,9 +1,10 @@
 import React from 'react'
 
 import { cubeLetters } from '../../resources/cubeLetters'
-import Cube from '../Cubes/Cube';
+import Cube from './Cube';
 
 const BoardDisplay = ({cubes}) => {
+
   function parseCubes(cubes) {
     const parsed = [];
     for (let i = 0; i < 32; i += 2) {
@@ -30,9 +31,8 @@ const BoardDisplay = ({cubes}) => {
   return (
     <div className='w-[450px] border border-black rounded-md p-2 m-2'>
       <p className='font-bold'>app/javascript/components/Board/BoardDisplay.jsx</p>
-      cubes: {cubes}
+      <p className='italic text-xs'>width 450px</p>
       <ul className='grid grid-cols-4 grid-rows-4'>{renderCubes()}</ul>
-      <p className='font-bold'> == width fixed at 450px for clean grid ==</p>
     </div>
   )
 }

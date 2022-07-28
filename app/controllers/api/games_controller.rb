@@ -14,7 +14,7 @@ class Api::GamesController < ApplicationController
 
   # POST  /api/games/new(.:format)
   def create
-    @game = Game.new(game_params)
+    @game = Game.new()
     if @game.save
       render json: @game
     else

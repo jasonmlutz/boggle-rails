@@ -1,54 +1,66 @@
 // app/javascript/components/Landing.jsx
-import React, {useEffect, useState} from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import { Spinner } from "../resources/Spinner";
+import BoardDisplay from "../features/games/BoardDisplay";
+
+import { addNewGame } from "../features/games/gamesSlice";
 
 const Landing = () => {
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(null);
+  const [addGameRequestStatus, setAddGameRequestStatus] = useState('idle')
 
-  async function createGame() {
-    const token = document.querySelector('[name=csrf-token]').content;
-    const response = await fetch(`/api/games`, {
-      method: "POST",
-      headers: {
-      "X-CSRF-TOKEN": token,
-      },
-    })
+  const dispatch = useDispatch();
+  const error = useSelector((state) => state.games.error);
 
-    if (!response.ok) {
-      const message = `An error has occurred: ${response.statusText}`;
-      window.alert(message);
-      return;
+  let content;
+
+  async function generateGame() {
+    if (addGameRequestStatus === "idle") {
+      try {
+        setAddGameRequestStatus('pending')
+        const token = document.querySelector("[name=csrf-token]").content;
+        const data = await dispatch(addNewGame({token})).unwrap();
+        setData(data);
+      } catch {
+        console.error("Failed to create game: ", err);
+      } finally {
+        setAddGameRequestStatus("succeeded");
+      }
     }
-
-    const data = await response.json();
-
-    setData(data);
   }
 
-  return (
-    <div className='border border-black rounded-md p-2 m-2'>
-      <p className='font-bold'>app/javascript/components/Landing.jsx</p>
+  if (addGameRequestStatus === "idle") {
+    content = (
       <div>
-          <ul>
+        <ul>
           <li>
-            {data && data.id ? <Navigate to={`/game/${data.id}`} replace={true} /> : <div onClick={createGame}
-              className='hover:underline'
-            >
+            <div onClick={generateGame} className="hover:underline">
               New Game
-            </div>}
+            </div>
           </li>
           <li>
-            <Link
-              to='/scores'
-              className='hover:underline'
-            >
+            <Link to="/scores" className="hover:underline">
               High Scores
             </Link>
           </li>
         </ul>
       </div>
-    </div>
-  )
-}
+    );
+  } else if (addGameRequestStatus === "pending") {
+    content = <Spinner text="Loading..." />;
+  } else if (addGameRequestStatus === "succeeded") {
+    content = <Navigate to={`/games/${data.id}`} />
+  }
 
-export default Landing
+  return (
+    <div className="border border-black rounded-md p-2 m-2">
+      <p className="font-bold">app/javascript/components/Landing.jsx</p>
+      {content}
+    </div>
+  );
+};
+
+export default Landing;

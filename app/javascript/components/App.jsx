@@ -10,7 +10,7 @@ const App = () => {
   const routes = useRoutes([
     { path: "/", element: <Landing /> },
     {
-      path: "games/new",
+      path: "games/:gameId",
       element: <GamePage />,
     },
     { path: "scores/", element: <ScoresList /> },

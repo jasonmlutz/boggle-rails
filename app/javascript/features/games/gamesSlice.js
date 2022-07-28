@@ -11,13 +11,15 @@ const initialState = gamesAdaptor.getInitialState({
   error: null,
 });
 
-export const fetchGames = createAsyncThunk(
-  "games/fetchGames",
-  async () => {
-    const response = await fetch(`/api/games/`);
-    return response.json();
-  }
-);
+export const fetchGames = createAsyncThunk("games/fetchGames", async () => {
+  const response = await fetch(`/api/games/`);
+  return response.json();
+});
+
+export const fetchGameById = createAsyncThunk('games/fetchGameById', async (gameId) => {
+  const response = await fetch(`/api/games/${gameId}`);
+  return response.json();
+})
 
 export const addNewGame = createAsyncThunk(
   "games/addNewGame",
@@ -28,7 +30,6 @@ export const addNewGame = createAsyncThunk(
       headers: {
         "X-CSRF-TOKEN": token,
       },
-      body: JSON.stringify({ cubes }),
     });
     return response.json();
   }
@@ -51,7 +52,18 @@ const gamesSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(addNewGame.fulfilled, gamesAdaptor.addOne);
+      .addCase(addNewGame.fulfilled, gamesAdaptor.addOne)
+      .addCase(fetchGameById.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchGameById.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        gamesAdaptor.addOne(state, action.payload);
+      })
+      .addCase(fetchGameById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      });
   },
 });
 
