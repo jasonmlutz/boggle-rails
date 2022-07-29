@@ -4,11 +4,11 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 
-const scoresAdaptor = createEntityAdapter({
+const scoresAdapter = createEntityAdapter({
   sortComparer: (a, b) => b.score - a.score, // largest scores first
 });
 
-const initialState = scoresAdaptor.getInitialState({
+const initialState = scoresAdapter.getInitialState({
   status: "idle",
   error: null,
 });
@@ -23,14 +23,14 @@ const scoresSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder 
+    builder
       .addCase(fetchScores.pending, (state, action) => {
         state.status = "loading";
       })
       .addCase(fetchScores.fulfilled, (state, action) => {
         state.status = "succeeded";
         // Add any fetched scores to the array
-        scoresAdaptor.upsertMany(state, action.payload)
+        scoresAdapter.upsertMany(state, action.payload);
       })
       .addCase(fetchScores.rejected, (state, action) => {
         state.status = "failed";
@@ -42,4 +42,4 @@ const scoresSlice = createSlice({
 export default scoresSlice.reducer;
 
 export const { selectAll: selectAllScores, selectById: selectScoreById } =
-  scoresAdaptor.getSelectors((state) => state.scores);
+  scoresAdapter.getSelectors((state) => state.scores);

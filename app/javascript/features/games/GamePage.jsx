@@ -13,13 +13,13 @@ export const GamePage = () => {
 
   const gameStatus = useSelector((state) => state.games.status);
   const error = useSelector((state) => state.games.error);
-  const game = useSelector((state) => selectGameById(state, gameId))
+  const game = useSelector((state) => selectGameById(state, gameId));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (gameStatus === "idle") {
-      dispatch(fetchGameById(gameId))
+      dispatch(fetchGameById(gameId));
     }
   }, [gameStatus, dispatch]);
 
@@ -36,7 +36,7 @@ export const GamePage = () => {
   return (
     <div className="w-[550px] border border-black rounded-md p-2 m-2">
       <p className="font-bold">app/javascript/features/games/GamePage.jsx</p>
-      <p className="italic text-xs">width 450px</p>
+      <p className="italic text-xs">width 550px</p>
       {content}
     </div>
   );

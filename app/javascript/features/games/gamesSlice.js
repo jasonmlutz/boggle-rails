@@ -4,9 +4,9 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 
-const gamesAdaptor = createEntityAdapter();
+const gamesAdapter = createEntityAdapter();
 
-const initialState = gamesAdaptor.getInitialState({
+const initialState = gamesAdapter.getInitialState({
   status: "idle",
   error: null,
 });
@@ -16,10 +16,13 @@ export const fetchGames = createAsyncThunk("games/fetchGames", async () => {
   return response.json();
 });
 
-export const fetchGameById = createAsyncThunk('games/fetchGameById', async (gameId) => {
-  const response = await fetch(`/api/games/${gameId}`);
-  return response.json();
-})
+export const fetchGameById = createAsyncThunk(
+  "games/fetchGameById",
+  async (gameId) => {
+    const response = await fetch(`/api/games/${gameId}`);
+    return response.json();
+  }
+);
 
 export const addNewGame = createAsyncThunk(
   "games/addNewGame",
@@ -46,19 +49,19 @@ const gamesSlice = createSlice({
       })
       .addCase(fetchGames.fulfilled, (state, action) => {
         state.status = "succeeded";
-        gamesAdaptor.upsertMany(state, action.payload);
+        gamesAdapter.upsertMany(state, action.payload);
       })
       .addCase(fetchGames.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(addNewGame.fulfilled, gamesAdaptor.addOne)
+      .addCase(addNewGame.fulfilled, gamesAdapter.addOne)
       .addCase(fetchGameById.pending, (state, action) => {
         state.status = "loading";
       })
       .addCase(fetchGameById.fulfilled, (state, action) => {
         state.status = "succeeded";
-        gamesAdaptor.addOne(state, action.payload);
+        gamesAdapter.addOne(state, action.payload);
       })
       .addCase(fetchGameById.rejected, (state, action) => {
         state.status = "failed";
@@ -70,4 +73,4 @@ const gamesSlice = createSlice({
 export default gamesSlice.reducer;
 
 export const { selectAll: selectAllGames, selectById: selectGameById } =
-  gamesAdaptor.getSelectors((state) => state.games);
+  gamesAdapter.getSelectors((state) => state.games);
