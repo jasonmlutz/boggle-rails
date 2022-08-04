@@ -20,6 +20,8 @@ const BoardDisplay = ({ cubes }) => {
     .join("")
     .toUpperCase();
 
+  const currentIndexes = letters.map((letter) => letter.index);
+
   function parseCubes(cubes) {
     const parsed = [];
     for (let i = 0; i < 32; i += 2) {
@@ -49,7 +51,9 @@ const BoardDisplay = ({ cubes }) => {
     console.log(`submitting currentWord: ${currentWord}`);
     // generate id
 
-    dispatch(addWord({ word: currentWord, id: uuid() }));
+    dispatch(
+      addWord({ word: currentWord, id: uuid(), indexes: currentIndexes })
+    );
     dispatch(clearCurrentWord());
   }
 
