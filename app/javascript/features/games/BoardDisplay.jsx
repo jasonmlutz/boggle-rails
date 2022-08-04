@@ -1,10 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { v4 as uuid } from "uuid";
 
 import { cubeLetters } from "../../resources/cubeLetters";
 import Cube from "./Cube";
 
 import { selectAllLetters, clearCurrentWord } from "../letters/lettersSlice";
+import { addWord } from "../words/wordsSlice";
+
+import WordList from "../words/WordList";
 
 const BoardDisplay = ({ cubes }) => {
   const dispatch = useDispatch();
@@ -41,6 +45,14 @@ const BoardDisplay = ({ cubes }) => {
     });
   }
 
+  function handleSubmit() {
+    console.log(`submitting currentWord: ${currentWord}`);
+    // generate id
+
+    dispatch(addWord({ word: currentWord, id: uuid() }));
+    dispatch(clearCurrentWord());
+  }
+
   return (
     <div className="w-[450px] border border-black rounded-md p-2 m-2">
       <p className="font-bold">
@@ -48,13 +60,25 @@ const BoardDisplay = ({ cubes }) => {
       </p>
       <p className="italic text-xs">width 450px</p>
       <ul className="grid grid-cols-4 grid-rows-4">{renderCubes()}</ul>
-      <button
-        className="border border-black rounded-md p-2 m-2 hover:bg-slate-200 cursor:pointer"
-        onClick={() => dispatch(clearCurrentWord())}
-      >
-        CLEAR
-      </button>
-      <p>Current Word: {currentWord}</p>
+      <div className="flex flex-row justify-between">
+        <button
+          className="border border-black rounded-md p-2 m-2 hover:bg-slate-200 cursor:pointer"
+          onClick={() => dispatch(clearCurrentWord())}
+        >
+          CLEAR
+        </button>
+        <ul className="flex flex-col w-40 h-16 border border-black rounded-md p-2 m-2">
+          <li>Current Word:</li>
+          <li>{currentWord}</li>
+        </ul>
+        <button
+          className="border border-black rounded-md p-2 m-2 hover:bg-slate-200 cursor:pointer"
+          onClick={handleSubmit}
+        >
+          SUBMIT
+        </button>
+      </div>
+      <WordList />
     </div>
   );
 };
