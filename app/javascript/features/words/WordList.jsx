@@ -1,21 +1,23 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { selectAllWords } from "./wordsSlice";
+import { selectAllWords, setActiveWord, clearActiveWord } from "./wordsSlice";
 
-function handleMouseEnter(word) {
-  console.log(word.word, word.indexes);
-}
-function handleMouseLeave() {
-  console.log("leaving!");
-}
 const WordList = () => {
+  const dispatch = useDispatch();
+
+  function handleMouseEnter(word) {
+    dispatch(setActiveWord(word.indexes));
+  }
+  function handleMouseLeave() {
+    dispatch(clearActiveWord());
+  }
   const words = useSelector(selectAllWords).map((word, i) => (
     <li
       onMouseEnter={() => handleMouseEnter(word)}
       onMouseLeave={() => handleMouseLeave(word)}
       key={i}
-      className="border border-black rounded-md p-2 mb-1 hover:bg-slate-200"
+      className="border border-black rounded-md p-2 mb-1 mr-1 hover:bg-slate-200"
     >
       {word.word}
     </li>

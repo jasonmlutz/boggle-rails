@@ -5,7 +5,9 @@ const lettersAdapter = createEntityAdapter({
   selectId: (cube) => cube.index,
 });
 
-const initialState = lettersAdapter.getInitialState();
+const initialState = lettersAdapter.getInitialState({
+  lastLetter: null,
+});
 
 function isNeighbor(a, b) {
   return (
@@ -18,15 +20,15 @@ const lettersSlice = createSlice({
   name: "letters",
   initialState,
   reducers: {
-    clearCurrentWord: lettersAdapter.removeAll,
+    clearCurrentWord(state, action) {
+      lettersAdapter.removeAll(state, action);
+      state.lastLetter = null;
+    },
     addLetter(state, action) {
       const { row, col } = action.payload;
-      const values = Object.values(state.entities);
-      if (
-        !values.length ||
-        isNeighbor({ row, col }, values[values.length - 1])
-      ) {
+      if (!state.lastLetter || isNeighbor({ row, col }, state.lastLetter)) {
         lettersAdapter.addOne(state, action.payload);
+        state.lastLetter = action.payload;
       } else {
         console.log("letter must be adjacent to terminal letter!");
       }
@@ -41,3 +43,8 @@ export default lettersSlice.reducer;
 export const { selectAll: selectAllLetters } = lettersAdapter.getSelectors(
   (state) => state.letters
 );
+
+export function isHighlighted(state, index) {
+  if (state.hasOwnProperty("ids")) return state.ids.includes(index);
+  else return false;
+}
