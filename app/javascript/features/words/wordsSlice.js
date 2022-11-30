@@ -6,6 +6,7 @@ const wordsAdapter = createEntityAdapter({
 
 const initialState = wordsAdapter.getInitialState({
   activeWordIndexes: [],
+  submittedWords: [],
 });
 
 const wordsSlice = createSlice({
@@ -14,9 +15,12 @@ const wordsSlice = createSlice({
   reducers: {
     addWord(state, action) {
       const { word } = action.payload;
-      const words = Object.values(state.entities);
-      if (!words.includes(word)) wordsAdapter.addOne(state, action.payload);
-      else console.log("word exists in word list!");
+      if (!state.submittedWords.includes(word)) {
+        wordsAdapter.addOne(state, action.payload);
+        state.submittedWords.push(word);
+      } else {
+        console.log("word already exists in list!");
+      }
     },
     setActiveWord(state, action) {
       state.activeWordIndexes = action.payload;
